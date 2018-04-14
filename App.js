@@ -1,40 +1,64 @@
-import React from 'react';
-import { StyleSheet, ScrollView, Image, TouchableOpacity, Text, View } from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, Text, View, Image } from 'react-native';
+import { DrawerNavigator, DrawerItems } from 'react-navigation'
 
-export default class App extends React.Component {
-  onPressBtn()
-  {
+import { Container, Content, Header, Body, Icon } from 'native-base';
 
-  }
+import HomeScreen from './HomeScreen';
+import SettingsScreen from './SettingsScreen';
 
+class App extends Component
+{
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <ScrollView>
-          <TouchableOpacity  style={styles.imageButton} onPress={this.onPressBtn}>
-            <Image style={styles.imageButtonImage} source={require("./assets/2.jpeg")}/>
-          </TouchableOpacity >
-        </ScrollView>
+      <View style={{flex: 1}}>
+        <PageNavigator />
       </View>
     );
   }
 }
 
+const CustomDrawerContentComponent = (props) =>
+(
+  <Container>
+    <Header style={{height: 200}}>
+      <Body style={styles.drawerBody}>
+        <Image style={styles.drawerImage} source={require('./assets/2.jpeg')} />
+      </Body>
+    </Header>
+    <Content>
+      <DrawerItems {...props} />
+    </Content>
+  </Container>
+);
+
+const PageNavigator = DrawerNavigator({
+    Home: {
+      screen: HomeScreen
+    },
+    Settings: {
+      screen: SettingsScreen
+    }
+  },
+  {
+    initialRouteName: 'Home',
+    contentComponent: CustomDrawerContentComponent,
+    drawerOpenRoute: 'DrawerOpen',
+    drawerCloseRoute: 'DrawerClose',
+    drawerToggleRoute: 'DrawerToggle'
+  }
+);
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  drawerImage: {
+    height: 150,
+    width: 150,
+    borderRadius: 75,
   },
-  imageButton: {
-    backgroundColor: '#004488',
-    borderRadius: 5,
-    marginBottom: 20,
-    shadowColor: '#303838',
-    shadowOffset: { width: 0, height: 5 },
-    shadowRadius: 10,
-    shadowOpacity: 0.35,
-  },
-  imageButtonImage: {
-    borderRadius: 5,
+  drawerBody: {
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
+
+export default App;
