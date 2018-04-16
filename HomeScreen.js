@@ -21,6 +21,8 @@ export default class HomeScreen extends Component
           justifyContent: 'center'
         }}>
           <Text>Home Screen</Text>
+          <Button onPress={() => updateItems() } />
+          <Button onPress={() => setItems() } />
         </Content>
       </Container>
     )

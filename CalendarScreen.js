@@ -16,7 +16,7 @@ export default class SettingsScreen extends Component
           justifyContent: 'center'
         }}>
           <Text>
-            Settings Screen
+            Calendar Screen
           </Text>
         </Content>
       </Container>

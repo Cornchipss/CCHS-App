@@ -1,17 +1,56 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, Button, StatusBar } from 'react-native';
 import { DrawerNavigator, DrawerItems } from 'react-navigation'
 
 import { Container, Content, Header, Body, Icon } from 'native-base';
 
+import firebase from 'firebase';
+
 import HomeScreen from './HomeScreen';
-import SettingsScreen from './SettingsScreen';
+import CalendarScreen from './CalendarScreen'; // https://www.youtube.com/watch?v=VFRRqfhvejI
 
 class App extends Component
 {
-  render() {
+  componentWillMount()
+  {
+    let config = {
+      apiKey: "AIzaSyDm3NGvoY-jbd5Et3kczE-GAsjwBzQK5fU",
+      authDomain: "cchs-app.firebaseapp.com",
+      databaseURL: "https://cchs-app.firebaseio.com",
+      projectId: "cchs-app",
+      storageBucket: "cchs-app.appspot.com",
+      messagingSenderId: "529170559424"
+    };
+    firebase.initializeApp(config);
+
+    firebase.database().ref('users/003').set(
+      {
+        name: 'Troy Copeicus',
+        age: 16
+      }
+    ).then(() =>
+    {
+      console.log('INERSTED');
+    }).catch((err) =>
+    {
+      console.log(err);
+    });
+
+    firebase.database().ref('users').once('value', (data) => {
+      console.log(data.toJSON());
+    });
+
+    // Prints it every time the data is changed
+    // firebase.database().ref('users').on('value', (data) => {
+    //   console.log(data.toJSON());
+    // });
+  }
+
+  render()
+  {
     return (
       <View style={{flex: 1}}>
+        <StatusBar backgroundColor="blue" barStyle="light-content" />
         <PageNavigator />
       </View>
     );
@@ -37,7 +76,7 @@ const PageNavigator = DrawerNavigator({
       screen: HomeScreen
     },
     Settings: {
-      screen: SettingsScreen
+      screen: CalendarScreen
     }
   },
   {
