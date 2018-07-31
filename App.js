@@ -1,103 +1,66 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, Button, StatusBar } from 'react-native';
-import { DrawerNavigator, DrawerItems } from 'react-navigation'
+import { StyleSheet, Text, View, TextInput } from 'react-native';
 
-import { Container, Content, Header, Body, Icon } from 'native-base';
+import Hello from './Hello';
+import PropsThing from './PropsThing';
+import StateChanger from './StateChanger';
+import Styled from './Styled';
+import ImageSlider from './ImageSlider';
 
-import firebase from 'firebase';
+// Don't forget the "this." - https://www.youtube.com/watch?v=M5d7vygUPoQ
 
-import HomeScreen from './HomeScreen';
-import CalendarScreen from './CalendarScreen'; // https://www.youtube.com/watch?v=VFRRqfhvejI
-
-class App extends Component
+export default class App extends Component
 {
-  componentWillMount()
+  constructor(props)
   {
-    let config = {
-      apiKey: "AIzaSyDm3NGvoY-jbd5Et3kczE-GAsjwBzQK5fU",
-      authDomain: "cchs-app.firebaseapp.com",
-      databaseURL: "https://cchs-app.firebaseio.com",
-      projectId: "cchs-app",
-      storageBucket: "cchs-app.appspot.com",
-      messagingSenderId: "529170559424"
-    };
-    firebase.initializeApp(config);
+    super(props);
 
-    firebase.database().ref('users/003').set(
-      {
-        name: 'Troy Copeicus',
-        age: 16
-      }
-    ).then(() =>
-    {
-      console.log('INERSTED');
-    }).catch((err) =>
-    {
-      console.log(err);
-    });
-
-    firebase.database().ref('users').once('value', (data) => {
-      console.log(data.toJSON());
-    });
-
-    // Prints it every time the data is changed
-    // firebase.database().ref('users').on('value', (data) => {
-    //   console.log(data.toJSON());
-    // });
+    this.state = { text: '' };
   }
 
   render()
   {
     return (
-      <View style={{flex: 1}}>
-        <StatusBar backgroundColor="blue" barStyle="light-content" />
-        <PageNavigator />
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Hello />
+        </View>
+        <View style={styles.middle}>
+          <PropsThing condition={true} />
+          <StateChanger c1='#000' c2='#048' />
+          <Styled />
+        </View>
+        <View style={{flex: 3, display: "flex", backgroundColor: "blue"}}>
+          <View style={{display: "flex", flex: 1, backgroundColor: 'black'}}>
+            <ImageSlider style={{flex: 1}} images={[require('./images/asdf.jpg'), require('./images/asdf2.jpg')]} />
+          </View>
+        </View>
       </View>
     );
   }
 }
 
-const CustomDrawerContentComponent = (props) =>
-(
-  <Container>
-    <Header style={{height: 200}}>
-      <Body style={styles.drawerBody}>
-        <Image style={styles.drawerImage} source={require('./assets/2.jpeg')} />
-      </Body>
-    </Header>
-    <Content>
-      <DrawerItems {...props} />
-    </Content>
-  </Container>
-);
-
-const PageNavigator = DrawerNavigator({
-    Home: {
-      screen: HomeScreen
-    },
-    Settings: {
-      screen: CalendarScreen
-    }
-  },
-  {
-    initialRouteName: 'Home',
-    contentComponent: CustomDrawerContentComponent,
-    drawerOpenRoute: 'DrawerOpen',
-    drawerCloseRoute: 'DrawerClose',
-    drawerToggleRoute: 'DrawerToggle'
-  }
-);
-
 const styles = StyleSheet.create({
-  drawerImage: {
-    height: 150,
-    width: 150,
-    borderRadius: 75,
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
   },
-  drawerBody: {
-    justifyContent: 'center',
+  header: {
+    flex: 1,
+    backgroundColor: '#F00',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  middle: {
+    flex: 2,
+    backgroundColor: '#FFF',
     alignItems: 'center'
+  },
+  bottom: {
+    flex: 3,
+    backgroundColor: '#00F',
+    paddingLeft: 5,
+    display: 'flex',
+    flexDirection: 'column'
   }
 });
-
-export default App;
