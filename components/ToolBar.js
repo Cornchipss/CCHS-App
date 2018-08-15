@@ -21,7 +21,7 @@ export default class ToolBar extends Component
 const styles = StyleSheet.create(
 {
   container: {
-    backgroundColor: '#004488',
+    backgroundColor: '#007fff',
     display: 'flex',
     height: 84,
     paddingTop: 20,

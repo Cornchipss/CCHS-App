@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  StatusBar } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Header, Text } from 'react-native-elements'; // https://react-native-training.github.io/react-native-elements/docs/overview.html
 
-import ToolBar from './components/ToolBar';
 import ImageSlider from './components/ImageSlider';
 
 // Don't forget the "this." - https://www.youtube.com/watch?v=M5d7vygUPoQ
@@ -24,11 +19,14 @@ export default class App extends Component
   {
     return (
       <View style={styles.container}>
-        <ToolBar title="CCHS App" />
-        <View style={{flex: 3, display: "flex", backgroundColor: "blue"}}>
-          <View style={{display: "flex", flex: 1, backgroundColor: 'black'}}>
-            <ImageSlider style={{flex: 1, display:'flex'}} images={[require('./assets/images/asdf.jpg'), require('./assets/images/asdf2.jpg')]} />
-          </View>
+        <Header
+          statusBarProps={{ barStyle: 'light-content', backgroundColor: 'blue' }}
+          leftComponent={{ icon: 'menu', color: '#fff' }}
+          centerComponent={{ text: 'CCHS App', style: { color: '#fff' } }}
+          rightComponent={{ icon: 'home', color: '#fff' }}
+        />
+        <View style={{flex: 1, display: "flex", backgroundColor: "white"}}>
+          <ImageSlider style={{flex: 1, display:'flex'}} images={[require('./assets/images/asdf.jpg'), require('./assets/images/asdf2.jpg')]} />
         </View>
       </View>
     );
