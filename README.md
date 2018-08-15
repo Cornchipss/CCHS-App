@@ -1,5 +1,7 @@
 # CCHS App
-<a href="https://github.com/Cornchipss/CCHS-App"><img alt="Byte Club" src="https://raw.githubusercontent.com/Cornchipss/CCHS-App/master/assets/images/logo.png" width:"256px" height="auto"/></a>
+<a href="https://github.com/Cornchipss/CCHS-App">
+<img src="https://raw.githubusercontent.com/Cornchipss/CCHS-App/master/assets/images/logo.png" alt="Byte Club" style="width:256px; height=auto;" />
+</a>
 
 The CCHS App is the Cedar Crest High School's offical app made by the App Development group of the CCHS Byte Club.
 
