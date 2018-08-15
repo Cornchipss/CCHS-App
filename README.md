@@ -9,7 +9,7 @@ The CCHS App is the Cedar Crest High School's offical app made by the App Develo
 ### Getting set up to edit the app
 
 *The CCHS App requires [Node.js](https://nodejs.org/) to run on your pc.*
-Clone or download the project from GitHub.
+- Clone or download the project from GitHub.
 ```sh
 $ npm install -g create-react-native-app
 $ cd /directory/to/project/
