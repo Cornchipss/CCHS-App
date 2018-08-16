@@ -1,11 +1,47 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Dimensions } from 'react-native';
-import { Header, Text, Tile } from 'react-native-elements'; // https://react-native-training.github.io/react-native-elements/docs/overview.html
+import { StyleSheet, View, Dimensions, ScrollView, SafeAreaView } from 'react-native';
+import { Header, Text, Tile } from 'react-native-elements'; // docs: https://react-native-training.github.io/react-native-elements/docs/overview.html
+import { NavigationActions, createDrawerNavigator, DrawerItems } from 'react-navigation';
 
 import ImageSlider from './components/ImageSlider';
 import Title from './components/Title';
 
+import HomeScreen from './screens/Home'
+import EventsScreen from './screens/Events'
+
 // Don't forget the 'this.' - https://www.youtube.com/watch?v=M5d7vygUPoQ
+
+// docs: https://reactnavigation.org/docs/en/stack-navigator.html#routeconfigs
+const routeConfigs =
+{
+  // For each screen you can navigate to, have an entry like this
+  Home:
+  {
+    screen: HomeScreen, // React component to be used
+    navigationOptions: {
+      title: 'Home'
+    }
+  },
+  Events:
+  {
+    screen: EventsScreen,
+    navigationOptions: {
+      title: 'Events'
+    }
+  }
+}
+
+const navigatorConfig =
+{
+  backBehavior: true,
+  initialRouteName: 'Home',
+  contentOptions: { activeTintColor: '#007fff' },
+  contentComponent: DrawerContent
+};
+
+import DrawerContent from './components/DrawerContent';
+
+const AppNavigator = createDrawerNavigator(routeConfigs, navigatorConfig);
 
 export default class App extends Component
 {
@@ -14,34 +50,11 @@ export default class App extends Component
     super(props);
   }
 
-  openNavigation()
-  {
-
-  }
-
-  navigateToHomepage()
-  {
-
-  }
-
   render()
   {
     return (
       <View style={styles.container}>
-        <Header backgroundColor='#002366'
-          statusBarProps={{ barStyle: 'light-content', backgroundColor: 'blue' }}
-          leftComponent={{ icon: 'menu', color: '#fff', onPress: () => this.openNavigation() }}
-          centerComponent={{ text: 'CCHS App', style: { color: '#fff' } }}
-          rightComponent={{ icon: 'home', color: '#fff', onPress: () => this.navigateToHomepage() }}
-        />
-        <View style={{flex: 1, display: 'flex', backgroundColor: 'white'}}>
-          <Title />
-          <View style={styles.contentBox}>
-            <Text style={styles.contentTitle}>Announcements</Text>
-            <Text>Oh my something intense happened!</Text>
-          </View>
-          <ImageSlider style={{flex: 1}} images={[require('./assets/images/asdf.jpg'), require('./assets/images/asdf2.jpg')]} />
-        </View>
+        <AppNavigator />
       </View>
     );
   }

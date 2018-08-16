@@ -30,7 +30,7 @@ export default class Title extends Component
         </View>
       );
     }
-    if(this.props.subtitle)
+    else
     {
       return(
         <View onLayout={(e) => this.orientationChange(e)}>
@@ -41,9 +41,16 @@ export default class Title extends Component
     }
   }
 
+  /**
+   * Decides whether or not to abbreviate High School based off the window's width
+   * @return {string} HS if window width < 400, otherwise High School
+   */
   getProperText()
   {
-    return Dimensions.get('window').width < 400 ? 'HS' : 'High School';
+    if(Dimensions.get('window').width < 400)
+      return 'HS';
+    else
+      return 'High School';
   }
 }
 
