@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { View, ImageBackground, TouchableHighlight, StyleSheet } from 'react-native';
-import { Button } from 'react-native-elements'
+import { View, ImageBackground, TouchableHighlight, StyleSheet, Text } from 'react-native';
 
 export default class ImageSlider extends Component
 {
@@ -63,19 +62,12 @@ export default class ImageSlider extends Component
       <View style={styles.imageContainer, this.props.style}>
         <ImageBackground style={styles.image} source={this.state.currentImage} resizeMode='contain' >
           <View style={styles.btnContainer}>
-            <Button onPress={this.previousImage}
-              icon={{name: 'arrow-left', color:'black', type:'material-community'}}
-              buttonStyle={styles.slideBtn}
-              backgroundColor={'rgba(0, 0, 0, 0.4)'}
-              underlayColor={'rgba(0, 0, 0, 0.6)'}
-              color={'white'}
-              fontSize={32} />
-            <Button onPress={this.nextImage}
-              icon={{name: 'arrow-right', color:'black', type:'material-community'}}
-              buttonStyle={styles.slideBtn}
-              underlayColor={'rgba(0, 0, 0, 0.6)'}
-              color={'black'}
-              fontSize={32} />
+            <TouchableHighlight onPress={this.previousImage} style={styles.slideBtn} activeOpacity={0.5}>
+                <Text style={styles.slideBtnText}>&#60;</Text>
+            </TouchableHighlight>
+            <TouchableHighlight onPress={this.nextImage} style={styles.slideBtn} activeOpacity={0.5}>
+              <Text style={styles.slideBtnText}>&#62;</Text>
+            </TouchableHighlight>
           </View>
         </ImageBackground>
       </View>
@@ -109,11 +101,11 @@ const styles = StyleSheet.create(
   slideBtn:
   {
     height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    width: '20%',
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
-    width: 200
+    justifyContent: 'center'
   },
   slideBtnText:
   {
