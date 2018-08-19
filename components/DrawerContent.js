@@ -15,7 +15,7 @@ export default class DrawerContent extends Component
       <ScrollView>
         <SafeAreaView forceInset={{ top: 'always', horizontal: 'never' }}>
           <View style={styles.imageArea}>
-            <Image source={require('../assets/images/logo.png')} style={styles.imageIcon}/>
+            <Image source={require('../assets/images/cchs_logo_nav.png')} style={styles.imageIcon}/>
           </View>
           <DrawerItems {...this.props} />
         </SafeAreaView>
@@ -36,7 +36,7 @@ const styles = StyleSheet.create(
     alignItems: 'center',
     paddingTop: padding + 10,
     paddingBottom: padding - 10, // + 10 and - 10 give it a bit of room for the bar at the top of the screen, and since their net value is 0, it won't skew the padding
-    backgroundColor: '#007fff'
+    backgroundColor: '#002366'
   },
   imageIcon:
   {

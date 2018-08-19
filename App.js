@@ -33,7 +33,6 @@ const routeConfigs =
 
 const navigatorConfig =
 {
-  backBehavior: true,
   initialRouteName: 'Home',
   contentOptions: { activeTintColor: '#007fff' },
   contentComponent: DrawerContent

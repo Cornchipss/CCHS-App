@@ -22,23 +22,12 @@ export default class Title extends Component
 
   render()
   {
-    if(!this.props.subtitle)
-    {
-      return(
-        <View onLayout={(e) => this.orientationChange(e)}>
-          <Text style={styles.title}>Cedar Crest {this.state.dynamicText}</Text>
-        </View>
-      );
-    }
-    else
-    {
-      return(
-        <View onLayout={(e) => this.orientationChange(e)}>
-          <Text style={styles.title}>Cedar Crest {this.state.dynamicText}</Text>
-          <Text style={styles.subtitle}>{this.props.subtitle}</Text>
-        </View>
-      );
-    }
+    return(
+      <View onLayout={(e) => this.orientationChange(e)}>
+        <Text style={styles.title}>Cedar Crest {this.state.dynamicText}</Text>
+        {this.props.subtitle ? <Text style={styles.subtitle}>{this.props.subtitle}</Text> : null}
+      </View>
+    );
   }
 
   /**
