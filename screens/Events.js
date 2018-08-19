@@ -51,7 +51,7 @@ export default class App extends Component
   {
     return (
       <View style={styles.container}>
-        <CustomHeader />
+        <CustomHeader navigation={this.props.navigation}/>
         <View style={{flex: 1, display: 'flex', backgroundColor: 'white'}}>
           <Title subtitle='Events' />
           { !this.state.calendar ? this.renderLoader() : this.renderEvents() }

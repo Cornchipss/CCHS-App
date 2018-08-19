@@ -14,11 +14,9 @@ export default class App extends Component
 
   render()
   {
-    const {navigate} = this.props.navigation;
-
     return (
       <View style={styles.container}>
-        <CustomHeader />
+        <CustomHeader navigation={this.props.navigation}/>
         <View style={{flex: 1, display: 'flex', backgroundColor: 'white'}}>
           <Title />
           <View style={styles.contentBox}>

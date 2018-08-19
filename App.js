@@ -3,8 +3,7 @@ import { StyleSheet, View, Dimensions, ScrollView, SafeAreaView } from 'react-na
 import { Header, Text, Tile } from 'react-native-elements'; // docs: https://react-native-training.github.io/react-native-elements/docs/overview.html
 import { NavigationActions, createDrawerNavigator, DrawerItems } from 'react-navigation';
 
-import ImageSlider from './components/ImageSlider';
-import Title from './components/Title';
+import { ImageSlider, Title } from './components/Components';
 
 import HomeScreen from './screens/Home'
 import EventsScreen from './screens/Events'
