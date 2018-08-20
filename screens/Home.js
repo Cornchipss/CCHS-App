@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Dimensions } from 'react-native';
 import { Header, Text, Tile } from 'react-native-elements'; // https://react-native-training.github.io/react-native-elements/docs/overview.html
-import { DrawerActions } from 'react-navigation';
 
 import { ImageSlider, Title, CustomHeader } from '../components/Components';
 
@@ -34,16 +33,19 @@ export default class App extends Component
 }
 
 const styles = StyleSheet.create({
-  container: {
+  container:
+  {
     flex: 1,
     backgroundColor: '#fff',
   },
-  contentBox: {
+  contentBox:
+  {
     display: 'flex',
     paddingLeft: 5,
     paddingRight: 5
   },
-  contentTitle: {
+  contentTitle:
+  {
     fontSize: 24,
     alignSelf: 'center',
     color: '#808080'

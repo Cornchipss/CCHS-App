@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Dimensions, ActivityIndicator } from 'react-native';
 import { Header, Text, Tile } from 'react-native-elements'; // https://react-native-training.github.io/react-native-elements/docs/overview.html
-import { DrawerActions } from 'react-navigation';
 
 import { CustomHeader, Title } from '../components/Components';
 import { Event, Calendar } from '../util/Event';
 
-const axios = require('axios');
+const axios = require('axios'); // For ajax requests
 
 export default class App extends Component
 {
@@ -36,7 +35,11 @@ export default class App extends Component
     });
   }
 
-  setCalendar(cal)
+  /**
+   * Sets the calendar to load the events from
+   * @param {Calendar} cal The Calendar to set it to
+   */
+  setCalendar(cal: Calendar)
   {
     this.setState(prev =>
     {
@@ -54,12 +57,16 @@ export default class App extends Component
         <CustomHeader navigation={this.props.navigation}/>
         <View style={{flex: 1, display: 'flex', backgroundColor: 'white'}}>
           <Title subtitle='Events' />
-          { !this.state.calendar ? this.renderLoader() : this.renderEvents() }
+          { this.state.calendar ? this.renderEvents() : this.renderLoader() }
         </View>
       </View>
     );
   }
 
+  /**
+   * Returns the jsx to render all the events that have been loaded in from the calendar present in the state
+   * @return {JSX} A View with all the events in it formatted correctly
+   */
   renderEvents()
   {
     return (
@@ -75,6 +82,10 @@ export default class App extends Component
     );
   }
 
+  /**
+   * Returns the jsx to render a loader
+   * @return {JSX} An ActivityIndicator in a View
+   */
   renderLoader()
   {
     return (
@@ -96,12 +107,11 @@ const styles = StyleSheet.create(
 
 /**
  * Pulls the events from the school's database, puts them into an array of Event objects, and calls the handleEvents function with the argument of an array of event objects
- * @param  {[type]} start        [description]
- * @param  {[type]} end          [description]
- * @param  {[type]} handleEvents [description]
- * @return {[type]}              [description]
+ * @param  {Date} start        The date to start the search on
+ * @param  {Date} end          The date to end the search on
+ * @param  {Function} handleEvents What to do with an array of events parsed from the school's api
  */
-function pullEvents(start, end, handleEvents)
+function pullEvents(start: Date, end: Date, handleEvents: Function)
 {
   // This is how the school data likes to be formatted. Don't touch this please. Unless something breaks. If something breaks, check out the docs on if something breaks:
   /*
@@ -125,7 +135,7 @@ function pullEvents(start, end, handleEvents)
     "StartDate: '" + (parseInt(start.getMonth()) + 1) + "/" + start.getDate() + "/" + start.getFullYear() +  "', " +
     "EndDate: '" + (parseInt(end.getMonth()) + 1) + "/" + end.getDate() + "/" + end.getFullYear() + "'}";
 
-  // This is the only one that works. The stupid school's api is so stupid. So stupid.
+  // This is the only lib that works. The stupid school's api is so stupid.
   axios(
   {
     method: 'POST',
@@ -135,7 +145,7 @@ function pullEvents(start, end, handleEvents)
   }).then((result) =>
   {
     // Don't ever do this. Don't. It runs code from a string and returns its result, without any regard for security vulnerabilities.
-    // Sadly, the school decided to use it (actually a less efficient version) in their code anyway, so I have to :(.
+    // Sadly, the school decided to use it (actually a less efficient version (eval)) in their code anyway, so I have to :(.
     const eventsJSON = Function('return ' + JSON.parse(result.request._response).d)();
 
     let events = [];

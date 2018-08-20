@@ -10,7 +10,10 @@ export default class Title extends Component
     this.state = { dynamicText: this.getProperText() };
   }
 
-  orientationChange(e)
+  /**
+   * Called whenever the screen's orientation changes
+   */
+  orientationChange()
   {
     this.setState(prev =>
     {
@@ -45,12 +48,14 @@ export default class Title extends Component
 
 const styles = StyleSheet.create(
 {
-  title: {
+  title:
+  {
     fontSize: 32,
     color: '#002366',
     textAlign: 'center'
   },
-  subtitle: {
+  subtitle:
+  {
     fontSize: 24,
     color: '#004488',
     textAlign: 'center'
