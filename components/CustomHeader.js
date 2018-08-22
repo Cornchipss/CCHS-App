@@ -11,7 +11,8 @@ export default class CustomHeader extends Component
   render()
   {
     return (
-      <Header backgroundColor='#002366'
+      <Header style={this.props.style}
+        backgroundColor='#002366'
         statusBarProps={{ barStyle: 'light-content', backgroundColor: 'blue' }}
         leftComponent={{ icon: 'menu', color: '#fff', onPress: () => this.props.navigation.toggleDrawer() }}
         centerComponent={{ text: 'CCHS App', style: { color: '#fff' } }}

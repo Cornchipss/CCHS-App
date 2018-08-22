@@ -104,7 +104,6 @@ class Calendar
     else
     {
       this._events = [];
-
       this._start = s;
       this._end = e;
     }

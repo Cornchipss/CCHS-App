@@ -59,11 +59,11 @@ export default class ImageSlider extends Component
   {
     // Returns the JSX code to be rendered
     return (
-      <View style={styles.imageContainer, this.props.style}>
+      <View style={this.props.style}>
         <ImageBackground style={styles.image} source={this.state.currentImage} resizeMode='contain' >
           <View style={styles.btnContainer}>
             <TouchableHighlight onPress={this.previousImage} style={styles.slideBtn} activeOpacity={0.5}>
-                <Text style={styles.slideBtnText}>&#60;</Text>
+              <Text style={styles.slideBtnText}>&#60;</Text>
             </TouchableHighlight>
             <TouchableHighlight onPress={this.nextImage} style={styles.slideBtn} activeOpacity={0.5}>
               <Text style={styles.slideBtnText}>&#62;</Text>
@@ -77,16 +77,10 @@ export default class ImageSlider extends Component
 
 const styles = StyleSheet.create(
 {
-  imageContainer:
-  {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems:'center'
-  },
   image:
   {
     flex: 1,
-    width: undefined, // Setting these to undefined fits the image to the area of the flex box it is in
+    width: undefined, // Setting these to undefined fits the image to the area of the box it is in
     height: undefined
   },
   btnContainer:

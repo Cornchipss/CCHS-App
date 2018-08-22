@@ -7,6 +7,7 @@ import { ImageSlider, Title } from './components/Components';
 
 import HomeScreen from './screens/Home'
 import EventsScreen from './screens/Events'
+import FlappyFalconScreen from './screens/FlappyFalcon';
 
 // Don't forget the 'this.' - https://www.youtube.com/watch?v=M5d7vygUPoQ
 
@@ -17,15 +18,25 @@ const routeConfigs =
   Home:
   {
     screen: HomeScreen, // React component to be used
-    navigationOptions: {
+    navigationOptions:
+    {
       title: 'Home'
     }
   },
   Events:
   {
     screen: EventsScreen,
-    navigationOptions: {
+    navigationOptions:
+    {
       title: 'Events'
+    }
+  },
+  FlappyFalcon:
+  {
+    screen: FlappyFalconScreen,
+    navigationOptions:
+    {
+      title: 'Flappy Falcon'
     }
   }
 }

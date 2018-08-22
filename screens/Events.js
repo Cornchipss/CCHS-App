@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Dimensions, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, ScrollView, ActivityIndicator } from 'react-native';
 import { Header, Text, Tile } from 'react-native-elements'; // https://react-native-training.github.io/react-native-elements/docs/overview.html
 
 import { CustomHeader, Title } from '../components/Components';
-import { Event, Calendar } from '../util/Event';
+import { Event, Calendar, prettyDate } from '../util/Util';
 
 const axios = require('axios'); // For ajax requests
 
@@ -70,15 +70,25 @@ export default class App extends Component
   renderEvents()
   {
     return (
-      <View style={{flex: 1, display: 'flex'}}>
+      <ScrollView style={{flex: 1, display: 'flex'}}>
         <Text style={{alignSelf: 'center'}}>Events Loaded</Text>
         {
           this.state.calendar.events.map((event, index) =>
           (
-            <Text style={{alignSelf: 'center'}} key={event.title}>{event.title}</Text>
+            <View key={event.title} style={{display: 'flex', height: 200, paddingLeft: 20}}>
+              <Text>{event.title}</Text>
+              <Text>
+                {
+                  event.begin.getDate() === event.end.getDate() ?
+                  prettyDate(event.begin) :
+                  prettyDate(event.begin) + ' - ' + prettyDate(event.end)
+                }
+              </Text>
+              <Text>{event.category}</Text>
+            </View>
           ))
         }
-      </View>
+      </ScrollView>
     );
   }
 
