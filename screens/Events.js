@@ -23,6 +23,7 @@ export default class App extends Component
   componentWillMount()
   {
     let start = new Date();
+    start.setDate(start.getDate() - 100);
     let end = new Date();
     end.setDate(end.getDate() + this.state.lengthDays);
 
@@ -31,7 +32,7 @@ export default class App extends Component
       if(events !== null)
         this.setCalendar(new Calendar(start, end, events));
       else if(events !== undefined) // If they are undefined, there are no events.
-        throw new Error('Error loading events.'); // If the events variable is null, it could not load them for some reason.
+        this.setCalendar(new Calendar(start, end, [])); //Solved: Changed to a new empty calendar
     });
   }
 
@@ -70,25 +71,34 @@ export default class App extends Component
   renderEvents()
   {
     return (
-      <ScrollView style={{flex: 1, display: 'flex'}}>
-        <Text style={{alignSelf: 'center'}}>Events Loaded</Text>
+      <View style={{flex: 1, display: 'flex'}}>
         {
-          this.state.calendar.events.map((event, index) =>
-          (
-            <View key={event.title} style={{display: 'flex', height: 200, paddingLeft: 20}}>
-              <Text>{event.title}</Text>
-              <Text>
-                {
-                  event.begin.getDate() === event.end.getDate() ?
-                  prettyDate(event.begin) :
-                  prettyDate(event.begin) + ' - ' + prettyDate(event.end)
-                }
-              </Text>
-              <Text>{event.category}</Text>
+          this.state.calendar.events.length === 0 ?
+          <Text style={{alignSelf: 'center'}}>Yikers, Your Events Failed</Text>
+          :
+          <ScrollView style={{flex: 1, display: 'flex'}}>
+            <Text style={{alignSelf: 'center'}}>Events Loaded</Text>
+            <View style={{flex: 1, display: 'flex'}}>
+              {
+                this.state.calendar.events.map((event, index) =>
+                (
+                  <View key={event.title} style={{display: 'flex', height: 200, paddingLeft: 20}}>
+                    <Text>{event.title}</Text>
+                    <Text>
+                      {
+                        event.begin.getDate() === event.end.getDate() ?
+                        prettyDate(event.begin) :
+                        prettyDate(event.begin) + ' - ' + prettyDate(event.end)
+                      }
+                    </Text>
+                    <Text>{event.category}</Text>
+                  </View>
+                ))
+              }
             </View>
-          ))
+          </ScrollView>
         }
-      </ScrollView>
+      </View>
     );
   }
 
@@ -160,19 +170,22 @@ function pullEvents(start: Date, end: Date, handleEvents: Function)
 
     let events = [];
 
-    // Puts all the school events json into a nice array of nice event
-    for(let i = 0; i < eventsJSON.length; i++)
+    if(eventsJSON !== undefined) // If it's undefined, there are no events listed.
     {
-      events.push(new Event(new Date(eventsJSON[i].start), new Date(eventsJSON[i].end),
-                            eventsJSON[i].title, Event.getCategory(eventsJSON[i].CategoryColor)));
+      // Puts all the school events json into a nice array of nice events
+      for(let i = 0; i < eventsJSON.length; i++)
+      {
+        events.push(new Event(new Date(eventsJSON[i].start), new Date(eventsJSON[i].end),
+                              eventsJSON[i].title, Event.getCategory(eventsJSON[i].CategoryColor)));
+      }
     }
 
-    handleEvents(events);
+    handleEvents(events); // it said events are undefined when evaluating JSON.parse
   }).catch(err =>
   {
     console.log('ERROR PARSING EVENTS!');
     console.log(err);
 
-    handleEvents(null);
+    handleEvents([]);
   });
 }
