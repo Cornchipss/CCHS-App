@@ -30,8 +30,8 @@ export default class App extends Component
     {
       if(events !== null)
         this.setCalendar(new Calendar(start, end, events));
-      else
-        throw new IllegalStateException('Error loading events.'); // If the events variable is null, it could not load them for some reason.
+      else if(events !== undefined) // If they are undefined, there are no events.
+        throw new Error('Error loading events.'); // If the events variable is null, it could not load them for some reason.
     });
   }
 

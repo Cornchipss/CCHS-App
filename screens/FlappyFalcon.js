@@ -78,9 +78,9 @@ export default class FlappyFalcon extends Component
     }
   }
 
-  tooooooch(e)
+  touch()
   {
-    console.log(e);
+    this.state.handler.touch();
   }
 
   render()
@@ -88,7 +88,7 @@ export default class FlappyFalcon extends Component
     return (
       <View style={{flex: 1}}>
         <CustomHeader navigation={this.props.navigation} />
-        <TouchableWithoutFeedback onPressIn={(e) => this.tooooooch(e)}>
+        <TouchableWithoutFeedback onPressIn={() => this.touch()}>
           <View>
             <Canvas ref={canvas => this.handleCanvas(canvas)}/>
           </View>

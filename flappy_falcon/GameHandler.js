@@ -19,6 +19,11 @@ export default class GameHandler
       this.state.render(ctx);
   }
 
+  touch()
+  {
+    this.state.touch();
+  }
+
   get state() { return this._state; }
   set state(state: GameState) { this._state = state; }
 }

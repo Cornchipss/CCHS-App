@@ -1,14 +1,24 @@
 export default class GameObject
 {
-  constructor(x: int, y: int)
+  constructor(x: int, y: int, w: int, h: int, state: GameState)
   {
     this._sprite = undefined;
     this._x = x;
     this._y = y;
+    this._width = w;
+    this._height = h;
+    this._state = state;
   }
 
   tick() {}
   render() {}
+  touch() {}
+
+  collidingWith(obj: GameObject)
+  {
+    return (obj.x + obj.width  > this.x && obj.x < this.x + this.width) &&
+           (obj.y + obj.height > this.y && obj.y < this.y + this.height);
+  }
 
   // Getters & Setters //
 
@@ -21,6 +31,8 @@ export default class GameObject
   get y() { return this._y; }
   set y(y: int) { this._y = y; }
 
-  get width() { return this._sprite.getWidth(); }
-  get height() { return this._sprite.getHeight(); }
+  get width() { return this._width; }
+  get height() { return this._height; }
+
+  get state() { return this._state; }
 }

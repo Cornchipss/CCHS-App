@@ -5,6 +5,7 @@ import GameHandler from '../GameHandler';
 import { PIPE_DELAY_MS } from '../util/Reference';
 
 import Ground from '../objects/Ground';
+import Falcon from '../objects/Falcon';
 
 export default class PlayingGameState extends GameState
 {
@@ -14,7 +15,8 @@ export default class PlayingGameState extends GameState
 
     this._objects = [];
 
-    this._objects.push(new Ground(Dimensions.get('window').height - 112));
+    this._objects.push(new Ground(Dimensions.get('window').height - 112, this));
+    this._objects.push(new Falcon(50, 112, this));
   }
 
   tick()
@@ -33,6 +35,14 @@ export default class PlayingGameState extends GameState
     {
       if(o.sprite)
         o.sprite.init(canvas);
+    });
+  }
+
+  touch()
+  {
+    this.objects.forEach((o, i, arr) =>
+    {
+      o.touch();
     });
   }
 

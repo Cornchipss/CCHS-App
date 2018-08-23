@@ -5,15 +5,15 @@ import Sprite from '../sprites/Sprite';
 import GameObject from './GameObject';
 
 const originalSpriteSize = 226;
+const totalGroundMovement = 14;
 
 export default class Ground extends GameObject
 {
-  constructor(y: int)
+  constructor(y: int, state: GameState)
   {
-    super(0, y);
+    super(0, y, Dimensions.get('window').width + totalGroundMovement * 2, Dimensions.get('window').height - y, state);
 
-    this.totalGroundMovement = 14;
-    this._sprite = new Sprite('ground', Dimensions.get('window').width + this.totalGroundMovement * 2, Dimensions.get('window').height - y);
+    this.sprite = new Sprite('ground', this.width, this.height);
   }
 
   tick()
@@ -30,8 +30,6 @@ export default class Ground extends GameObject
 
   calcMaxMovement()
   {
-    return this.totalGroundMovement * (this.width / originalSpriteSize);
+    return totalGroundMovement * (this.width / originalSpriteSize);
   }
-
-  get width() { return Dimensions.get('window').width + this.totalGroundMovement; }
 }
