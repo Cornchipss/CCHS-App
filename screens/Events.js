@@ -76,13 +76,11 @@ export default class App extends Component
           this.state.calendar.events.length === 0 ?
           <Text style={{alignSelf: 'center'}}>Yikers, Your Events Failed</Text>
           :
-          <ScrollView style={{flex: 1, display: 'flex'}}>
-            <Text style={{alignSelf: 'center'}}>Events Loaded</Text>
-            <View style={{flex: 1, display: 'flex'}}>
+            <ScrollView style={{flex: 1, display: 'flex'}}>
               {
                 this.state.calendar.events.map((event, index) =>
                 (
-                  <View key={event.title} style={{display: 'flex', height: 200, paddingLeft: 20}}>
+                  <View key={event.title} style={{display: 'flex', height: 100, paddingLeft: 10, paddingRight: 10}}>
                     <Text>{event.title}</Text>
                     <Text>
                       {
@@ -95,8 +93,7 @@ export default class App extends Component
                   </View>
                 ))
               }
-            </View>
-          </ScrollView>
+       </ScrollView>
         }
       </View>
     );
