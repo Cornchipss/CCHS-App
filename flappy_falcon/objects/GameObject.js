@@ -1,38 +1,34 @@
-export default class GameObject
+import React, { PureComponent } from 'react';
+import { View, StyleSheet } from 'react-native';
+
+export default class GameObject extends PureComponent
 {
-  constructor(x: int, y: int, w: int, h: int, state: GameState)
+  static currentObjectId = 0;
+
+  constructor(props)
   {
-    this._sprite = undefined;
-    this._x = x;
-    this._y = y;
-    this._width = w;
-    this._height = h;
-    this._state = state;
+    super(props);
+
+    this.id = this.currentObjectId++;
   }
 
-  tick() {}
-  render() {}
-  touch() {}
+  render()
+  {
+    return (
+      <View style={{backgroundColor: 'blue', left: this.props.position.x, right: this.props.position.y, width: this.props.dimensions.width, height: this.props.dimensions.height}}/>
+    );
+  }
+
+  touch(e)
+  {
+    console.log(e);
+  }
+
+  tick(objects) {}
 
   collidingWith(obj: GameObject)
   {
-    return (obj.x + obj.width  > this.x && obj.x < this.x + this.width) &&
-           (obj.y + obj.height > this.y && obj.y < this.y + this.height);
+    return (obj.position.x + obj.dimensions.width  > this.position.x && obj.position.x < this.position.x + this.dimensions.width) &&
+           (obj.position.y + obj.dimensions.height > this.position.y && obj.position.y < this.position.y + this.dimensions.height);
   }
-
-  // Getters & Setters //
-
-  get sprite() { return this._sprite; }
-  set sprite(s: Sprite) { this._sprite = s; }
-
-  get x() { return this._x; }
-  set x(x: int) { this._x = x; }
-
-  get y() { return this._y; }
-  set y(y: int) { this._y = y; }
-
-  get width() { return this._width; }
-  get height() { return this._height; }
-
-  get state() { return this._state; }
 }

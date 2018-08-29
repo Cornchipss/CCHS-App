@@ -1,51 +1,49 @@
+import React from 'react';
+
 import GameObject from './GameObject';
 import Sprite from '../sprites/Sprite';
+import { Image } from 'react-native';
 // import Type from './Type';
 
 const MAX_SPEED = 2;
 
 export default class Falcon extends GameObject
 {
-  constructor(x: int, y: int, state: GameState)
+  constructor(props)
   {
-    super(x, y, 34, 24, state);
+    super(props);
 
-    this.sprite = new Sprite('falcon-0', this.width, this.height);
+    // this.sprite = new Sprite('falcon-0', this.width, this.height);
+    //
+    this.state =
+    {
+      image: 0,
+      images: [require('../sprites/images/falcon-0.png'), require('../sprites/images/falcon-1.png'), require('../sprites/images/falcon-2.png')]
+    }
 
     this._velocity = 0;
   }
 
-  render(ctx)
+  render()
   {
-    this.sprite.render(ctx, this.x, this.y);
+    return (
+      <Image source={this.state.images[this.state.image]} />
+    )
   }
 
-  tick()
+  tick(objects)
   {
     if(this._velocity > -MAX_SPEED)
       this._velocity -= 1;
 
-    if(this.state.objects !== undefined)
+    for(let i = 0; i < objects.length; i++)
     {
-      for(let i = 0; i < this.state.objects.length; i++)
+      const obj = objects[i];
+      if(obj !== this)
       {
-        const obj = this.state.objects[i];
-        if(obj !== this)
+        if(this.collidingWith(obj))
         {
-          if(this.collidingWith(obj))
-          {
-            // if(obj.type === Type.KILL)
-            // {
-            //   this.die();
-            // }
-            // else
-            // {
-              while(this.collidingWith(obj))
-              {
-                this.y -= Math.sign(this.velocity);
-              }
-            // }
-          }
+          this.die();
         }
       }
     }

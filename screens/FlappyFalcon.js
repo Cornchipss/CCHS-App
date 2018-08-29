@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import { View, Dimensions, TouchableWithoutFeedback } from 'react-native';
-import Canvas from 'react-native-canvas';
+import { View, Dimensions, TouchableWithoutFeedback, StatusBar } from 'react-native';
 
 import { CustomHeader } from '../components/Components';
 
-import GameHandler from '../flappy_falcon/GameHandler';
-import PlayingGameState from '../flappy_falcon/states/PlayingGameState';
+import Falcon from '../flappy_falcon/objects/Falcon';
+import Ground from '../flappy_falcon/objects/Ground';
 
-const FPS = 30;
+import GameEngine from '../game_engine/GameEngine';
 
 export default class FlappyFalcon extends Component
 {
@@ -25,8 +24,6 @@ export default class FlappyFalcon extends Component
   componentDidMount()
   {
     Expo.ScreenOrientation.allow(Expo.ScreenOrientation.Orientation.PORTRAIT);
-    this.renderGame();
-    setInterval(() => this.update(), FPS / 1000.0);
   }
 
   renderGame()
@@ -86,13 +83,12 @@ export default class FlappyFalcon extends Component
   render()
   {
     return (
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, display: 'flex'}}>
         <CustomHeader navigation={this.props.navigation} />
-        <TouchableWithoutFeedback onPressIn={() => this.touch()}>
-          <View>
-            <Canvas ref={canvas => this.handleCanvas(canvas)}/>
-          </View>
-        </TouchableWithoutFeedback>
+        <GameEngine style={{flex: 1}} objects={[
+          new Falcon({position: {x: 20, y: 100},
+                      dimensions: {width: 34, height: 24}})
+        ]}/>
       </View>
     );
   }

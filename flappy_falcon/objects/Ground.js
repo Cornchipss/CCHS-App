@@ -1,3 +1,4 @@
+import React from 'react';
 import { Dimensions } from 'react-native';
 
 import Sprite from '../sprites/Sprite';
@@ -16,7 +17,7 @@ export default class Ground extends GameObject
     this.sprite = new Sprite('ground', this.width, this.height);
   }
 
-  tick()
+  tick(objects)
   {
     this.x -= 1;
     if(this.x <= -this.calcMaxMovement())
