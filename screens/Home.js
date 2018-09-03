@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Header, Text, Tile } from 'react-native-elements'; // https://react-native-training.github.io/react-native-elements/docs/overview.html
+import { View, Text } from 'react-native';
 
 import { ImageSlider, Title, CustomHeader } from '../components/Components';
+
+import { styles } from '../util/Styles';
 
 export default class App extends Component
 {
@@ -16,7 +17,7 @@ export default class App extends Component
     return (
       <View style={styles.container}>
         <CustomHeader navigation={this.props.navigation}/>
-        <View style={{flex: 1, display: 'flex', backgroundColor: 'white'}}>
+        <View style={styles.container}>
           <Title />
           <View style={styles.contentBox}>
             <Text style={styles.contentTitle}>Announcements</Text>
@@ -31,23 +32,3 @@ export default class App extends Component
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container:
-  {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  contentBox:
-  {
-    display: 'flex',
-    paddingLeft: 5,
-    paddingRight: 5
-  },
-  contentTitle:
-  {
-    fontSize: 24,
-    alignSelf: 'center',
-    color: '#808080'
-  }
-});

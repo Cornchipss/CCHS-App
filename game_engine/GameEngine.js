@@ -12,7 +12,7 @@ export default class GameEngine extends Component
 
   componentWillMount()
   {
-    setInterval(() =>
+    this._tickInterval = setInterval(() =>
     {
       this.props.objects.forEach(o =>
       {
@@ -22,13 +22,27 @@ export default class GameEngine extends Component
 
       while(this.objectsToRemove.length !== 0)
       {
-        let i = this.props.objects.indexOf(this.objectsToRemove.pop());
+        let obj = this.objectsToRemove.pop();
+        obj.onRemove();
+        
+        let i = this.props.objects.indexOf(obj);
         if(i !== -1)
           this.props.objects.splice(i, 1);
       }
 
       this.forceUpdate();
     }, 60 / 1000.0);
+  }
+
+  componentWillUnmount()
+  {
+    clearInterval(this._tickInterval);
+
+    this.props.objects.forEach(o =>
+    {
+      if(o.onRemove)
+        o.onRemove();
+    });
   }
 
   removeObject(o)
@@ -48,15 +62,18 @@ export default class GameEngine extends Component
   render()
   {
     return (
-      <View style={[{backgroundColor: 'black'}, this.props.style]} onTouchStart={(e) => touch(e)}>
+      <View style={[{backgroundColor: 'black'}, this.props.style]} onTouchStart={(e) => this.touch(e)}>
         {
-          this.props.objects.map((obj, index) =>
+          this.props.objects.map(obj =>
           {
-            <View key={obj.id}
-            style={{position: 'absolute', left: obj.props.position.x, top: obj.props.position.y,
-            width: obj.props.dimensions.width, height: obj.props.dimensions.height}}>
-              <Text>HI</Text>
-            </View>
+            return (
+              <View key={obj.id}
+              style={{position: 'absolute', left: obj.props.position.x, top: obj.props.position.y,
+              width: obj.props.dimensions.width, height: obj.props.dimensions.height}}>
+                {/*<Text style={{color: 'white'}}>HI</Text>*/}
+                { obj.render() }
+              </View>
+            )
           })
         }
 

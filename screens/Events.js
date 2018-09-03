@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, ScrollView, ActivityIndicator } from 'react-native';
-import { Header, Text, Tile } from 'react-native-elements'; // https://react-native-training.github.io/react-native-elements/docs/overview.html
+import { View, Text, ScrollView, ActivityIndicator } from 'react-native';
 
 import { CustomHeader, Title } from '../components/Components';
 import { Event, Calendar, prettyDate } from '../util/Util';
+
+import { styles } from '../util/Styles';
 
 const axios = require('axios'); // For ajax requests
 
@@ -32,7 +33,9 @@ export default class App extends Component
       if(events !== null)
         this.setCalendar(new Calendar(start, end, events));
       else if(events !== undefined) // If they are undefined, there are no events.
-        this.setCalendar(new Calendar(start, end, [])); //Solved: Changed to a new empty calendar
+        this.setCalendar(new Calendar(start, end, []));
+      else
+        this.setCalendar(null); // This means the events failed to load.
     });
   }
 
@@ -56,7 +59,7 @@ export default class App extends Component
     return (
       <View style={styles.container}>
         <CustomHeader navigation={this.props.navigation}/>
-        <View style={{flex: 1, display: 'flex', backgroundColor: 'white'}}>
+        <View style={styles.container}>
           <Title subtitle='Events' />
           { this.state.calendar ? this.renderEvents() : this.renderLoader() }
         </View>
@@ -71,29 +74,28 @@ export default class App extends Component
   renderEvents()
   {
     return (
-      <View style={{flex: 1, display: 'flex'}}>
+      <View style={styles.container}>
         {
-          this.state.calendar.events.length === 0 ?
-          <Text style={{alignSelf: 'center'}}>Yikers, Your Events Failed</Text>
+          !this.state.calendar || this.state.calendar.events.length === 0 ?
+          <Text style={{alignSelf: 'center'}}>No school events present.</Text>
           :
-            <ScrollView style={{flex: 1, display: 'flex'}}>
-              {
-                this.state.calendar.events.map((event, index) =>
-                (
-                  <View key={event.title} style={{display: 'flex', height: 100, paddingLeft: 10, paddingRight: 10}}>
-                    <Text>{event.title}</Text>
-                    <Text>
-                      {
-                        event.begin.getDate() === event.end.getDate() ?
-                        prettyDate(event.begin) :
-                        prettyDate(event.begin) + ' - ' + prettyDate(event.end)
-                      }
-                    </Text>
-                    <Text>{event.category}</Text>
-                  </View>
-                ))
-              }
-       </ScrollView>
+          <ScrollView style={styles.container}>
+            {
+              this.state.calendar.events.map((event, index) =>
+              (
+                <View key={event.title} style={{display: 'flex', padding: 10}}>
+                  <Text>
+                    {
+                      event.begin.getDate() === event.end.getDate() ?
+                      prettyDate(event.begin) :
+                      prettyDate(event.begin) + ' - ' + prettyDate(event.end)
+                    }
+                  </Text>
+                  <Text>{event.title}</Text>
+                </View>
+              ))
+            }
+          </ScrollView>
         }
       </View>
     );
@@ -106,21 +108,12 @@ export default class App extends Component
   renderLoader()
   {
     return (
-      <View style={{flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+      <View style={[styles.container, styles.centerAll]}>
         <ActivityIndicator size={"large"} color={"#002366"} />
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create(
-{
-  container:
-  {
-    display: 'flex',
-    flex: 1
-  }
-});
 
 /**
  * Pulls the events from the school's database, puts them into an array of Event objects, and calls the handleEvents function with the argument of an array of event objects
@@ -172,12 +165,36 @@ function pullEvents(start: Date, end: Date, handleEvents: Function)
       // Puts all the school events json into a nice array of nice events
       for(let i = 0; i < eventsJSON.length; i++)
       {
-        events.push(new Event(new Date(eventsJSON[i].start), new Date(eventsJSON[i].end),
-                              eventsJSON[i].title, Event.getCategory(eventsJSON[i].CategoryColor)));
+        let event = new Event(new Date(eventsJSON[i].start), new Date(eventsJSON[i].end),
+                              eventsJSON[i].title, Event.getCategory(eventsJSON[i].CategoryColor));
+        for(let j = 0; j < events.length; j++)
+        {
+          let e = events[j];
+
+          if(e.title === event.title)
+          {
+            // They are the same events, so change the start/end date
+            if(e.start > event.start)
+            {
+              e.start = event.start;
+              event = null;
+              break;
+            }
+            else if(e.end < event.end)
+            {
+              e.end = event.end;
+              event = null;
+              break;
+            }
+          }
+        }
+
+        if(event)
+          events.push(event);
       }
     }
 
-    handleEvents(events); // it said events are undefined when evaluating JSON.parse
+    handleEvents(events);
   }).catch(err =>
   {
     console.log('ERROR PARSING EVENTS!');

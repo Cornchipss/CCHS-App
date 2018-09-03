@@ -9,7 +9,7 @@ export default class GameObject extends PureComponent
   {
     super(props);
 
-    this.id = this.currentObjectId++;
+    this.id = GameObject.currentObjectId++;
   }
 
   render()
@@ -19,12 +19,9 @@ export default class GameObject extends PureComponent
     );
   }
 
-  touch(e)
-  {
-    console.log(e);
-  }
-
+  touch(e) {}
   tick(objects) {}
+  onRemove() {}
 
   collidingWith(obj: GameObject)
   {

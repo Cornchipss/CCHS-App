@@ -3,9 +3,10 @@ import React from 'react';
 import GameObject from './GameObject';
 import Sprite from '../sprites/Sprite';
 import { Image } from 'react-native';
-// import Type from './Type';
 
-const MAX_SPEED = 2;
+const ACCEL_SPEED = 10.0;
+const DECEL_SPEED = 0.4;
+const ANIMATION_SPEED_MS = 50;
 
 export default class Falcon extends GameObject
 {
@@ -13,28 +14,45 @@ export default class Falcon extends GameObject
   {
     super(props);
 
-    // this.sprite = new Sprite('falcon-0', this.width, this.height);
-    //
-    this.state =
+    this.sprite =
     {
       image: 0,
       images: [require('../sprites/images/falcon-0.png'), require('../sprites/images/falcon-1.png'), require('../sprites/images/falcon-2.png')]
     }
 
-    this._velocity = 0;
+    this._velocity = 0.0;
+    this._rotation = 0;
+
+    this._wingChange = 1;
+
+    this._animation = setInterval(() =>
+    {
+      let wing = this.sprite.image + this._wingChange;
+      if(wing >= this.sprite.images.length)
+      {
+        this._wingChange = -1;
+        wing = this.sprite.images.length - 2;
+      }
+      else if(wing < 0)
+      {
+        this._wingChange = 1;
+        wing = 1;
+      }
+
+      this.sprite.image = wing;
+    }, ANIMATION_SPEED_MS);
   }
 
   render()
   {
     return (
-      <Image source={this.state.images[this.state.image]} />
+      <Image source={this.sprite.images[this.sprite.image]} />
     )
   }
 
   tick(objects)
   {
-    if(this._velocity > -MAX_SPEED)
-      this._velocity -= 1;
+    this._velocity -= DECEL_SPEED;
 
     for(let i = 0; i < objects.length; i++)
     {
@@ -48,7 +66,7 @@ export default class Falcon extends GameObject
       }
     }
 
-    this.y -= this.velocity;
+    this.props.position.y -= this.velocity;
   }
 
   die()
@@ -56,9 +74,16 @@ export default class Falcon extends GameObject
     console.log('ded');
   }
 
+  onRemove()
+  {
+    clearInterval(this._animation);
+  }
+
   touch()
   {
-    this._velocity = 10 * MAX_SPEED;
+    this._velocity = ACCEL_SPEED;
+
+    this._rotation = 350;
   }
 
   get velocity() { return this._velocity; }

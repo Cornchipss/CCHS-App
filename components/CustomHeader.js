@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header } from 'react-native-elements';
+import { Header } from 'react-native-elements'; // https://react-native-training.github.io/react-native-elements/docs/overview.html
 
 export default class CustomHeader extends Component
 {
