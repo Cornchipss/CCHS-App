@@ -21,9 +21,15 @@ export default class FlappyFalcon extends Component
     }
   }
 
-  componentDidMount()
+  componentWillMount()
   {
     Expo.ScreenOrientation.allow(Expo.ScreenOrientation.Orientation.PORTRAIT);
+
+    let screen = Dimensions.get('window');
+    console.log(new Ground({position: {x: 0, y: screen.height - 40},
+                dimensions: {width: screen.width + Ground.totalGroundMovement * 2, height: 40}}));
+
+                for(let i = 0; i < 10000; i++) {}
   }
 
   renderGame()
@@ -82,12 +88,16 @@ export default class FlappyFalcon extends Component
 
   render()
   {
+    let screen = Dimensions.get('window');
+
     return (
       <View style={{flex: 1, display: 'flex'}}>
         <CustomHeader navigation={this.props.navigation} />
         <GameEngine style={{flex: 1}} objects={[
           new Falcon({position: {x: 20, y: 100},
-                      dimensions: {width: 34, height: 24}})
+                      dimensions: {width: 34, height: 24}}),
+          new Ground({position: {x: 0, y: screen.height - 100},
+                      dimensions: {width: screen.width + Ground.totalGroundMovement * 2, height: 100}})
         ]}/>
       </View>
     );

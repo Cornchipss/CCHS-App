@@ -1,36 +1,36 @@
 import React from 'react';
-import { Dimensions } from 'react-native';
-
-import Sprite from '../sprites/Sprite';
+import { Image } from 'react-native';
 
 import GameObject from './GameObject';
 
 const originalSpriteSize = 226;
-const totalGroundMovement = 14;
 
 export default class Ground extends GameObject
 {
-  constructor(y: int, state: GameState)
-  {
-    super(0, y, Dimensions.get('window').width + totalGroundMovement * 2, Dimensions.get('window').height - y, state);
+  static get totalGroundMovement() { return 14; }
 
-    this.sprite = new Sprite('ground', this.width, this.height);
+  constructor(props)
+  {
+    super(props);
   }
 
   tick(objects)
   {
-    this.x -= 1;
-    if(this.x <= -this.calcMaxMovement())
-      this.x = 0; // Using some pixel measurements, this will cause the ground to loop, appearing to always go backwards
+    this.position.x -= 1;
+    if(this.position.x <= -this.calcMaxMovement())
+      this.position.x = 0; // Using some pixel measurements, this will cause the ground to loop, appearing to always go backwards
   }
 
-  render(ctx)
+  render()
   {
-    this.sprite.render(ctx, this.x, this.y);
+    return (
+      <Image style={{flex: 1, width: this.dimensions.width, height: undefined}} resizeMode='stretch' source={require('../sprites/images/ground.png')} />
+      // TODO: Calc ratio of scaling (using screenH / width or something similar)
+    );
   }
 
   calcMaxMovement()
   {
-    return totalGroundMovement * (this.width / originalSpriteSize);
+    return Ground.totalGroundMovement * (this.dimensions.width / originalSpriteSize);
   }
 }

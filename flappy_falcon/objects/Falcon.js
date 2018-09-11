@@ -66,7 +66,7 @@ export default class Falcon extends GameObject
       }
     }
 
-    this.props.position.y -= this.velocity;
+    this.position.y -= this.velocity;
   }
 
   die()

@@ -8,6 +8,8 @@ export default class GameEngine extends Component
     super(props);
 
     this.objectsToRemove = [];
+
+    console.log(this.props.objects);
   }
 
   componentWillMount()
@@ -24,7 +26,7 @@ export default class GameEngine extends Component
       {
         let obj = this.objectsToRemove.pop();
         obj.onRemove();
-        
+
         let i = this.props.objects.indexOf(obj);
         if(i !== -1)
           this.props.objects.splice(i, 1);
@@ -68,9 +70,8 @@ export default class GameEngine extends Component
           {
             return (
               <View key={obj.id}
-              style={{position: 'absolute', left: obj.props.position.x, top: obj.props.position.y,
-              width: obj.props.dimensions.width, height: obj.props.dimensions.height}}>
-                {/*<Text style={{color: 'white'}}>HI</Text>*/}
+              style={{position: 'absolute', left: obj.position.x, top: obj.position.y,
+              width: obj.dimensions.width, height: obj.dimensions.height, backgroundColor: 'blue'}}>
                 { obj.render() }
               </View>
             )
