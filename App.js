@@ -8,6 +8,7 @@ import { ImageSlider, Title } from './components/Components';
 import HomeScreen from './screens/Home'
 import EventsScreen from './screens/Events'
 import FlappyFalconScreen from './screens/FlappyFalcon';
+import MapScreen from './screens/Map';
 
 // Don't forget the 'this.' - https://www.youtube.com/watch?v=M5d7vygUPoQ
 
@@ -37,6 +38,14 @@ const routeConfigs =
     navigationOptions:
     {
       title: 'Flappy Falcon'
+    }
+  },
+  Map:
+  {
+    screen: MapScreen,
+    navigationOptions:
+    {
+      title: 'Map'
     }
   }
 }
