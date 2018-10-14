@@ -12,25 +12,26 @@ export default class Ground extends GameObject
   constructor(props)
   {
     super(props);
+
+    this.dimensions[0] = this.dimensions[0] + this.calcMaxMovement() * 2;
   }
 
   tick(objects)
   {
-    this.position.x -= 1;
-    if(this.position.x <= -this.calcMaxMovement())
-      this.position.x = 0; // Using some pixel measurements, this will cause the ground to loop, appearing to always go backwards
+    this.position[0] -= 2;
+    if(this.position[0] <= -this.calcMaxMovement())
+      this.position[0] = 0; // Using some pixel measurements, this will cause the ground to loop, appearing to always go backwards
   }
 
   render()
   {
     return (
-      <Image style={{flex: 1, width: this.dimensions.width, height: undefined}} resizeMode='stretch' source={require('../sprites/images/ground.png')} />
-      // TODO: Calc ratio of scaling (using screenH / width or something similar)
+      <Image style={{flex: 1, width: this.dimensions[0] + this.calcMaxMovement() * 2, height: undefined}} resizeMode='stretch' source={require('../sprites/images/ground.png')} />
     );
   }
 
   calcMaxMovement()
   {
-    return Ground.totalGroundMovement * (this.dimensions.width / originalSpriteSize);
+    return Ground.totalGroundMovement * (this.dimensions[0] / originalSpriteSize);
   }
 }

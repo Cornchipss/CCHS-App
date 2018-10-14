@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableWithoutFeedback } from 'react-native';
+
+import MenuStart from '../flappy_falcon/menus/MenuStart';
+import MenuLoss from '../flappy_falcon/menus/MenuLoss';
+
+import Timer from './Timer';
 
 export default class GameEngine extends Component
 {
@@ -7,86 +12,136 @@ export default class GameEngine extends Component
   {
     super(props);
 
-    this.objectsToRemove = [];
+    this.handlePress = this.handlePress.bind(this); // Makes the 'this' in the tick function always refer to this class, and is more efficient than doing '() => this.tick()' in the render function
 
-    console.log(this.props.objects);
+    this._objects = this.props.objects || [];
+
+    this._objectsToRemove = [];
+    this._objectsToAdd = [];
+
+    this._menuShowing = 2;
   }
 
   componentWillMount()
   {
-    this._tickInterval = setInterval(() =>
-    {
-      this.props.objects.forEach(o =>
-      {
-        if(o.tick)
-          o.tick(this.props.objects, this);
-      });
+    this._timer = new Timer(60);
+    this._timer.subscribe(() => this.tick());
 
-      while(this.objectsToRemove.length !== 0)
-      {
-        let obj = this.objectsToRemove.pop();
-        obj.onRemove();
+    if(this.props.onLoad)
+      this.props.onLoad(this);
 
-        let i = this.props.objects.indexOf(obj);
-        if(i !== -1)
-          this.props.objects.splice(i, 1);
-      }
+    this.objects.forEach(o => o ? o.init(this) : undefined);
 
-      this.forceUpdate();
-    }, 60 / 1000.0);
+    this._timer.start();
   }
 
   componentWillUnmount()
   {
-    clearInterval(this._tickInterval);
+    this._timer.stop();
+  }
 
-    this.props.objects.forEach(o =>
+  tick()
+  {
+    if(!this.isMenuShowing)
     {
-      if(o.onRemove)
-        o.onRemove();
-    });
+      this.objects.forEach(o =>
+      {
+        if(o)
+          o.tick(this);
+      });
+
+      // You can't modify an array while it's being foreach'd, so just remove the qued objects afterwards
+      while(this._objectsToAdd.length !== 0)
+      {
+        this.objects.push(this._objectsToAdd.pop());
+      }
+
+      while(this._objectsToRemove.length !== 0)
+      {
+        let o = this._objectsToRemove.pop();
+
+        for(let i = 0; i < this.objects.length; i++)
+        {
+          if(this.objects[i].id === o.id)
+          {
+            this.objects.splice(i);
+            return;
+          }
+        }
+      }
+
+      this.forceUpdate(); // Makes react rerender the components
+    }
   }
 
   removeObject(o)
   {
-    this.objectsToRemove.push(o);
+    for(let i = 0; i < this.objects.length; i++)
+    {
+      if(this.objects[i].id === o.id)
+        return;
+    }
+    this._objectsToRemove.push(o);
   }
 
-  touch(e)
+  addObject(o)
   {
-    this.props.objects.forEach(o =>
+    for(let i = 0; i < this.objects.length; i++)
     {
-      if(o.touch)
+      if(this.objects[i].id === o.id)
+        return;
+    }
+
+    this._objectsToAdd.push(o);
+  }
+
+  handlePress(e)
+  {
+    if(this.menu === 1)
+      this.menu = 0;
+
+    this.objects.forEach(o =>
+    {
+      if(o)
         o.touch(e);
     });
   }
 
   render()
   {
-    return (
-      <View style={[{backgroundColor: 'black'}, this.props.style]} onTouchStart={(e) => this.touch(e)}>
-        {
-          this.props.objects.map(obj =>
-          {
-            return (
-              <View key={obj.id}
-              style={{position: 'absolute', left: obj.position.x, top: obj.position.y,
-              width: obj.dimensions.width, height: obj.dimensions.height, backgroundColor: 'blue'}}>
-                { obj.render() }
-              </View>
-            )
-          })
-        }
+    return(
+      <TouchableWithoutFeedback onPressIn={this.handlePress} style={{flex: 1, display: 'flex'}}>
+        <View style={{flex: 1, display: 'flex'}}>
+          { this.createScene() }
+        </View>
+      </TouchableWithoutFeedback>
+    );
+  }
 
-        {this.props.children}
+  createScene()
+  {
+    return (
+      <View style={{flex: 1, display: 'flex'}}>
+        {
+          this.objects.map((obj, index) =>
+          (
+            obj.position ?
+              <View key={obj.id} style={{position: 'absolute', left: obj.position[0], top: obj.position[1], width: obj.dimensions[0], height: obj.dimensions[1]}}>
+                {obj.render()}
+              </View>
+              :
+              undefined
+          ))
+        }
+        { this.menu === 1 ? <MenuStart /> : undefined }
+        { this.menu === 2 ? <MenuLoss /> : undefined }
       </View>
     );
   }
-}
 
-GameEngine.defaultProps =
-{
-  objects: [],
-  tick: () => {},
-  style: undefined
-};
+  get timer() { return this._timer; }
+  get objects() { return this._objects; }
+  get isMenuShowing() { return this.menu !== 0; }
+  get menu() { return this._menuShowing; }
+  set menu(m) { this._menuShowing = m; }
+}

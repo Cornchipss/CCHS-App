@@ -4,7 +4,7 @@ import GameObject from './GameObject';
 import Sprite from '../sprites/Sprite';
 import { Image } from 'react-native';
 
-const ACCEL_SPEED = 10.0;
+const JUMP_ACCELERATION = 8.0;
 const DECEL_SPEED = 0.4;
 const ANIMATION_SPEED_MS = 50;
 
@@ -24,64 +24,81 @@ export default class Falcon extends GameObject
     this._rotation = 0;
 
     this._wingChange = 1;
+    this._wingChangeDeltaTime = 0;
 
-    this._animation = setInterval(() =>
+    this._dead = false;
+  }
+
+  init(engine: GameEngine)
+  {
+    engine.timer.subscribe(() =>
     {
-      let wing = this.sprite.image + this._wingChange;
-      if(wing >= this.sprite.images.length)
+      if(!engine.isMenuShowing)
       {
-        this._wingChange = -1;
-        wing = this.sprite.images.length - 2;
-      }
-      else if(wing < 0)
-      {
-        this._wingChange = 1;
-        wing = 1;
-      }
+        this._wingChangeDeltaTime += 16; // Aprox 16 ms have passed since last update because it runs at 60fps
 
-      this.sprite.image = wing;
-    }, ANIMATION_SPEED_MS);
+        if(this._wingChangeDeltaTime >= ANIMATION_SPEED_MS)
+        {
+          let wing = this.sprite.image + this._wingChange;
+          if(wing >= this.sprite.images.length)
+          {
+            this._wingChange = -1;
+            wing = this.sprite.images.length - 2;
+          }
+          else if(wing < 0)
+          {
+            this._wingChange = 1;
+            wing = 1;
+          }
+
+          this.sprite.image = wing;
+          this._wingChangeDeltaTime = 0;
+        }
+      }
+    });
   }
 
   render()
   {
-    return (
-      <Image source={this.sprite.images[this.sprite.image]} />
-    )
+    return (<Image source={this.sprite.images[this.sprite.image]} />);
   }
 
-  tick(objects)
+  tick(engine)
   {
-    this._velocity -= DECEL_SPEED;
-
-    for(let i = 0; i < objects.length; i++)
+    if(!this._dead)
     {
-      const obj = objects[i];
-      if(obj !== this)
+      this._velocity -= DECEL_SPEED;
+
+      for(let i = 0; i < engine.objects.length; i++)
       {
-        if(this.collidingWith(obj))
+        const obj = engine.objects[i];
+        if(obj !== this)
         {
-          this.die();
+          if(this.collidingWith(obj))
+          {
+            this.die();
+          }
         }
       }
-    }
 
-    this.position.y -= this.velocity;
+      this.position[1] -= this.velocity;
+    }
+    else
+    {
+      this._velocity = 0;
+      engine.menu = 2;
+    }
   }
 
   die()
   {
     console.log('ded');
+    this._dead = true;
   }
 
-  onRemove()
+  touch(e)
   {
-    clearInterval(this._animation);
-  }
-
-  touch()
-  {
-    this._velocity = ACCEL_SPEED;
+    this._velocity = JUMP_ACCELERATION;
 
     this._rotation = 350;
   }
