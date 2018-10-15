@@ -34,16 +34,14 @@ export default class FlappyFalcon extends Component
       <View style={{flex: 1}}>
         <CustomHeader />
         <GameEngine
-        objects=
-        {[
-          new Falcon({position: [20, 20], dimensions: [50, 50]}),
-          new Ground({position: [0, screen.height - 120], dimensions: [screen.width, 120]})
-        ]}
         onLoad=
         {(engine) =>
         {
+          engine.objects.push(new Falcon({position: [20, 20], dimensions: [50, 50]}));
+          engine.objects.push(new Ground({position: [0, screen.height - 120], dimensions: [screen.width, 120]}));
+
           const DIST_BETWEEN_PIPES = 200;
-          
+
           for(let i = 0; i < screen.width / DIST_BETWEEN_PIPES; i++)
           {
             engine.objects.push(new Pipe({position: [screen.width + i * DIST_BETWEEN_PIPES, 0], dimensions: [50, screen.height]}));

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, TouchableWithoutFeedback, AsyncStorage } from 'react-native';
 
 import MenuStart from '../flappy_falcon/menus/MenuStart';
 import MenuLoss from '../flappy_falcon/menus/MenuLoss';
@@ -12,18 +12,22 @@ export default class GameEngine extends Component
   {
     super(props);
 
+    this.state = {bestScore: 0, menu: 1};
+
     this.handlePress = this.handlePress.bind(this); // Makes the 'this' in the tick function always refer to this class, and is more efficient than doing '() => this.tick()' in the render function
 
-    this._objects = this.props.objects || [];
+    this._objects = [];
 
     this._objectsToRemove = [];
     this._objectsToAdd = [];
-
-    this._menuShowing = 2;
   }
 
   componentWillMount()
   {
+    this.loadData();
+
+    this.score = 0;
+
     this._timer = new Timer(60);
     this._timer.subscribe(() => this.tick());
 
@@ -134,14 +138,58 @@ export default class GameEngine extends Component
           ))
         }
         { this.menu === 1 ? <MenuStart /> : undefined }
-        { this.menu === 2 ? <MenuLoss /> : undefined }
+        { this.menu === 2 ? <MenuLoss okPress={
+          () =>
+          {
+            this.menu = 1;
+            this.score = 0;
+            this.objects.length = 0; // clears an array
+            
+            this.props.onLoad(this);
+          }
+        } score={this.score} bestScore={this.state.bestScore} /> : undefined }
       </View>
     );
+  }
+
+  endGame()
+  {
+    if(this.score > this.bestScore)
+    {
+      this.bestScore = this.score;
+      this.save();
+    }
+
+    this.menu = 2;
+  }
+
+  save()
+  {
+    AsyncStorage.setItem('FlappyFalcon@bestScore', this.bestScore + '');
+  }
+
+  async loadData()
+  {
+    await AsyncStorage.getItem('FlappyFalcon@bestScore').then(data =>
+    {
+      if(data !== null)
+        this.setState(prev => {return {bestScore: data, menu: prev.menu}});
+      else
+      {
+        this.setState(prev => {return {bestScore: 0, menu: prev.menu}});
+        this.save();
+      }
+    });
+  }
+
+  scorePoint()
+  {
+    this.score++;
   }
 
   get timer() { return this._timer; }
   get objects() { return this._objects; }
   get isMenuShowing() { return this.menu !== 0; }
-  get menu() { return this._menuShowing; }
-  set menu(m) { this._menuShowing = m; }
+  get menu() { return this.state.menu; }
+  set menu(m) { this.setState(prev => {return {bestScore: prev.bestScore, menu: m}}); }
 }
