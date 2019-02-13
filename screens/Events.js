@@ -43,7 +43,7 @@ export default class App extends Component
    * Sets the calendar to load the events from
    * @param {Calendar} cal The Calendar to set it to
    */
-  setCalendar(cal: Calendar)
+  setCalendar(cal)
   {
     this.setState(prev =>
     {
@@ -121,7 +121,7 @@ export default class App extends Component
  * @param  {Date} end          The date to end the search on
  * @param  {Function} handleEvents What to do with an array of events parsed from the school's api
  */
-function pullEvents(start: Date, end: Date, handleEvents: Function)
+function pullEvents(start, end, handleEvents)
 {
   // This is how the school data likes to be formatted. Don't touch this please. Unless something breaks. If something breaks, check out the docs on if something breaks:
   /*

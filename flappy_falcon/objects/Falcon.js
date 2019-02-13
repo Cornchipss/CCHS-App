@@ -1,7 +1,6 @@
 import React from 'react';
 
 import GameObject from './GameObject';
-import Sprite from '../sprites/Sprite';
 import { Image } from 'react-native';
 
 const JUMP_ACCELERATION = 8.0;
@@ -29,7 +28,7 @@ export default class Falcon extends GameObject
     this._dead = false;
   }
 
-  init(engine: GameEngine)
+  init(engine)
   {
     engine.timer.subscribe(() =>
     {
@@ -60,7 +59,7 @@ export default class Falcon extends GameObject
 
   render()
   {
-    return (<Image source={this.sprite.images[this.sprite.image]} />);
+    return (<Image source={this.sprite.images[this.sprite.image]} style={{backgroundColor: 'red'}} />);
   }
 
   tick(engine)
@@ -72,10 +71,11 @@ export default class Falcon extends GameObject
       for(let i = 0; i < engine.objects.length; i++)
       {
         const obj = engine.objects[i];
-        if(obj !== this)
+        if(obj !== this && obj)
         {
           if(this.collidingWith(obj))
           {
+            console.log('DEAD');
             this.die();
           }
         }

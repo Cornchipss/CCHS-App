@@ -14,6 +14,8 @@ export default class Ground extends GameObject
     super(props);
 
     this.dimensions[0] = this.dimensions[0] + this.calcMaxMovement() * 2;
+
+    console.log(this.colliders);
   }
 
   tick(objects)
@@ -26,7 +28,7 @@ export default class Ground extends GameObject
   render()
   {
     return (
-      <Image style={{flex: 1, width: this.dimensions[0] + this.calcMaxMovement() * 2, height: undefined}} resizeMode='stretch' source={require('../sprites/images/ground.png')} />
+      <Image style={{flex: 1, width: this.dimensions[0], height: this.dimensions[1]}} resizeMode='stretch' source={require('../sprites/images/ground.png')} />
     );
   }
 

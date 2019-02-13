@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Dimensions, ScrollView, SafeAreaView } from 'react-native';
-import { Header, Text, Tile } from 'react-native-elements'; // docs: https://react-native-training.github.io/react-native-elements/docs/overview.html
-import { NavigationActions, createDrawerNavigator, DrawerItems } from 'react-navigation';
+import { StyleSheet, View } from 'react-native';
+import { createDrawerNavigator } from 'react-navigation';
 
-import { ImageSlider, Title } from './components/Components';
+import { DelayNotification } from './components/Components';
 
 import HomeScreen from './screens/Home'
 import EventsScreen from './screens/Events'
 import FlappyFalconScreen from './screens/FlappyFalcon';
-import MapScreen from './screens/Map';
 
 // Don't forget the 'this.' - https://www.youtube.com/watch?v=M5d7vygUPoQ
 
@@ -39,14 +37,6 @@ const routeConfigs =
     {
       title: 'Flappy Falcon'
     }
-  },
-  Map:
-  {
-    screen: MapScreen,
-    navigationOptions:
-    {
-      title: 'Map'
-    }
   }
 }
 
@@ -72,6 +62,7 @@ export default class App extends Component
   {
     return (
       <View style={styles.container}>
+        <DelayNotification />
         <AppNavigator />
       </View>
     );

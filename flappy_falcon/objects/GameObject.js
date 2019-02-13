@@ -1,6 +1,3 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-
 export default class GameObject
 {
   static currentObjectId = 0;
@@ -15,6 +12,9 @@ export default class GameObject
     }
 
     this._id = GameObject.currentObjectId++;
+
+    this.colliders = [];
+    this.colliders.push({position: [0, 0], dimensions: this.dimensions})
   }
 
   render()
@@ -24,16 +24,44 @@ export default class GameObject
     );
   }
 
-  touch(e: Object) {}
-  tick(engine: GameEngine) {}
-  init(engine: GameEngine) {}
+  touch(e) {}
+  tick(engine) {}
+  init(engine) {}
 
-  collidingWith(obj: GameObject)
+  collidingWith(obj)
   {
     if(!obj) return false;
-    return this.position[0] + this.dimensions[0] > obj.position[0] && this.position[0] < obj.position[0] + obj.dimensions[0]
-        && this.position[1] + this.dimensions[1] > obj.position[1] && this.position[1] < obj.position[1] + obj.dimensions[1];
+
+    for(let i = 0; i < this.colliders.length; i++)
+    {
+      let me = this.colliders[i];
+
+      for(let j = 0; j < obj.colliders.length; j++)
+      {
+        let them = obj.colliders[j];
+        if(this.colliderPosition(me)[0] < obj.colliderPosition(them)[0] + them.dimensions[0])
+        {
+          if(this.colliderPosition(me)[0] + me.dimensions[0] > obj.colliderPosition(them)[0])
+          {
+            if(this.colliderPosition(me)[1] < obj.colliderPosition(them)[1] + them.dimensions[1])
+            {
+              if(this.colliderPosition(me)[1] + me.dimensions[1] > obj.colliderPosition(them)[1])
+              {
+                return true;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    return false;
   }
 
   get id () { return this._id; }
+
+  colliderPosition(c)
+  {
+    return [this.position[0] + c.position[0], this.position[1] + c.position[1]];
+  }
 }

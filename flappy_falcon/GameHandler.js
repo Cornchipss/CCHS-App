@@ -1,5 +1,3 @@
-import { GameState } from './states/GameState';
-
 export default class GameHandler
 {
   constructor()
@@ -25,5 +23,5 @@ export default class GameHandler
   }
 
   get state() { return this._state; }
-  set state(state: GameState) { this._state = state; }
+  set state(state) { this._state = state; }
 }

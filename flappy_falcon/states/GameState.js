@@ -1,8 +1,6 @@
-import GameHandler from '../GameHandler';
-
 export default class GameState
 {
-  constructor(ctx: Object, handler: GameHandler)
+  constructor(ctx, handler)
   {
     this._handler = handler;
   }

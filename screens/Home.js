@@ -5,7 +5,7 @@ import { ImageSlider, Title, CustomHeader } from '../components/Components';
 
 import { styles } from '../util/Styles';
 
-export default class App extends Component
+export default class Home extends Component
 {
   constructor(props)
   {

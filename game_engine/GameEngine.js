@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableWithoutFeedback, AsyncStorage } from 'react-native';
+import { View, AsyncStorage } from 'react-native';
+import { GameLoop } from 'react-native-game-engine';
 
 import MenuStart from '../flappy_falcon/menus/MenuStart';
 import MenuLoss from '../flappy_falcon/menus/MenuLoss';
@@ -15,6 +16,7 @@ export default class GameEngine extends Component
     this.state = {bestScore: 0, menu: 1};
 
     this.handlePress = this.handlePress.bind(this); // Makes the 'this' in the tick function always refer to this class, and is more efficient than doing '() => this.tick()' in the render function
+    this.tick = tick.bind(this);
 
     this._objects = [];
 
@@ -24,12 +26,10 @@ export default class GameEngine extends Component
 
   componentWillMount()
   {
-    this.loadData();
-
     this.score = 0;
 
     this._timer = new Timer(60);
-    this._timer.subscribe(() => this.tick());
+    this._timer.subscribe(() => () => this.forceUpdate());
 
     if(this.props.onLoad)
       this.props.onLoad(this);
@@ -37,6 +37,11 @@ export default class GameEngine extends Component
     this.objects.forEach(o => o ? o.init(this) : undefined);
 
     this._timer.start();
+  }
+
+  componentDidMount()
+  {
+    this.loadData();
   }
 
   componentWillUnmount()
@@ -73,8 +78,6 @@ export default class GameEngine extends Component
           }
         }
       }
-
-      this.forceUpdate(); // Makes react rerender the components
     }
   }
 
@@ -113,12 +116,13 @@ export default class GameEngine extends Component
 
   render()
   {
+    this.tick();
+
     return(
-      <TouchableWithoutFeedback onPressIn={this.handlePress} style={{flex: 1, display: 'flex'}}>
-        <View style={{flex: 1, display: 'flex'}}>
-          { this.createScene() }
-        </View>
-      </TouchableWithoutFeedback>
+      <GameLoop GameLoop style={{flex: 1, backgroundColor: 'white'}} onUpdate={this.tick}>
+        {/* { this.createScene() } */}
+        <View style={{position: 'absolute', top: 50, left: 50, backgroundColor: 'red'}} />
+      </GameLoop>
     );
   }
 

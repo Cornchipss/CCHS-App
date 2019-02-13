@@ -10,7 +10,7 @@ class Event
    * @param {string} title    The title of the event
    * @param {string} category The category of the event
    */
-  constructor(begin: Date, end: Date, title: string, category: string)
+  constructor(begin, end, title, category)
   {
     this._begin = begin;
     this._end = end;
@@ -19,23 +19,23 @@ class Event
   }
 
   get begin() { return this._begin; }
-  set begin(b: Date) { this._begin = b; }
+  set begin(begin) { this._begin = b; }
 
   get end() { return this._end; }
-  set end(e: Date) { this._end = e; }
+  set end(e) { this._end = e; }
 
   get title() { return this._title; }
-  set title(t: string) { this._title = t; }
+  set title(t) { this._title = t; }
 
   get category() { return this._category; }
-  set category(c: string) { this._category = c; }
+  set category(c) { this._category = c; }
 
   /**
    * Checks if the event is happening on a supplied date.
    * @param  {Date}  date The date to see if the event takes place on.
    * @return {Boolean} true if it takes place on said date, false if not.
    */
-  isOnDay(date: Date)
+  isOnDay(date)
   {
     return this.begin <= date && this.end >= date;
   }
@@ -93,7 +93,7 @@ class Calendar
    * @param {Date} e End date of calendar
    * @param {Event[]} evts The events the calendar consists of
    */
-  constructor(s: Date, e: Date, evts: Event[])
+  constructor(s, e, evts)
   {
     if(arguments.length === 3)
     {
@@ -113,14 +113,14 @@ class Calendar
    * Adds an event to the calendar's list of events
    * @param {Event} e The event to add
    */
-  addEvent(e: Event) { this.events.push(e); }
+  addEvent(e) { this.events.push(e); }
 
   /**
    * Returns every event that takes place on a given date
    * @param  {Date} date The day to find events that take place on it
    * @return {Event[]} Each event that takes place on that day
    */
-  getEventsOn(date: Date)
+  getEventsOn(date)
   {
     let evts = [];
     for(let i = 0; i < this.events.length; i++)
