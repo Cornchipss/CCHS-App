@@ -17,9 +17,8 @@ export default class Title extends Component
   {
     this.setState(prev =>
     {
-      return {
-        dynamicText: this.getProperText()
-      };
+      prev.dynamicText = this.getProperText();
+      return prev;
     });
   }
 

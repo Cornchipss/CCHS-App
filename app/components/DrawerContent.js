@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, SafeAreaView, Image, StyleSheet, View } from 'react-native';
+import { ScrollView, SafeAreaView, Image, StyleSheet, View, ViewStyle } from 'react-native';
 import { DrawerItems } from 'react-navigation';
 
 export default class DrawerContent extends Component

@@ -16,7 +16,7 @@ export default class GameEngine extends Component
     this.state = {bestScore: 0, menu: 1};
 
     this.handlePress = this.handlePress.bind(this); // Makes the 'this' in the tick function always refer to this class, and is more efficient than doing '() => this.tick()' in the render function
-    this.tick = tick.bind(this);
+    this.tick = this.tick.bind(this);
 
     this._objects = [];
 

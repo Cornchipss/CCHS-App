@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { createDrawerNavigator } from 'react-navigation';
+import { createDrawerNavigator, createAppContainer } from 'react-navigation';
 
-import { DelayNotification } from './components/Components';
+import { DelayNotification } from './app/components/Components';
 
-import HomeScreen from './screens/Home'
-import EventsScreen from './screens/Events'
-import FlappyFalconScreen from './screens/FlappyFalcon';
+import HomeScreen from './app/screens/Home'
+import EventsScreen from './app/screens/Events'
+import FlappyFalconScreen from './app/screens/FlappyFalcon';
 
 // Don't forget the 'this.' - https://www.youtube.com/watch?v=M5d7vygUPoQ
 
@@ -47,9 +47,10 @@ const navigatorConfig =
   contentComponent: DrawerContent
 };
 
-import DrawerContent from './components/DrawerContent';
+import DrawerContent from './app/components/DrawerContent';
 
 const AppNavigator = createDrawerNavigator(routeConfigs, navigatorConfig);
+const AppContainer = createAppContainer(AppNavigator);
 
 export default class App extends Component
 {
@@ -58,12 +59,18 @@ export default class App extends Component
     super(props);
   }
 
+  handleNavigationChange(prevState, newState, action)
+  {
+    // https://reactnavigation.org/docs/en/app-containers.html
+    // This method does nothing but state changes are required to be handled
+  }
+
   render()
   {
     return (
       <View style={styles.container}>
         <DelayNotification />
-        <AppNavigator />
+        <AppContainer onNavigationStateChange={this.handleNavigationChange} uriPrefix="/app" />
       </View>
     );
   }

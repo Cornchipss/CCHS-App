@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Dimensions } from 'react-native';
+import { View, Text, Dimensions, StyleSheet, ViewStyle } from 'react-native';
 import ajax from 'axios';
 import { Button } from 'react-native-elements';
 
@@ -11,7 +11,7 @@ export default class DelayNotification extends Component
 
         this.state = { notification: undefined }
 
-        ajax({cache: false, url: 'https://www.clsd.k12.pa.us/cms/Tools/OnScreenAlerts/UserControls/OnScreenAlertDialogListWrapper.aspx'}).then(res =>
+        ajax('https://www.clsd.k12.pa.us/cms/Tools/OnScreenAlerts/UserControls/OnScreenAlertDialogListWrapper.aspx').then(res =>
         {
             const returnedData = res.data;
             let dataStart = 'tabindex="0"><p>';
@@ -32,7 +32,7 @@ export default class DelayNotification extends Component
         {
             return (
             <View style={{padding: 50, zIndex: 1000, justifyContent: 'center', alignItems: 'center', height: Dimensions.get('window').height, width: Dimensions.get('window').width, position: 'absolute', display: 'flex', backgroundColor: 'white'}}>
-                <Text style={{textAlign: 'center', color: 'black', fontSize: 22, marginBottom: 40}}>{this.state.notification}</Text>
+                <Text style={{textAlign: 'center', color: 'black', fontSize: 22, marginBottom: 40}}>{this.state['notification']}</Text>
                 <Button buttonStyle={{backgroundColor: '#002366', width: 100}} containerStyle={{fontSize: 22}} onPress={() => this.setState({notification: undefined})} type='solid' title='OK'/>
             </View>
             );

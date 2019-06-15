@@ -9,7 +9,7 @@ import Falcon from '../objects/Falcon';
 
 export default class PlayingGameState extends GameState
 {
-  constructor(handler: GameHandler)
+  constructor(handler)
   {
     super(handler);
 

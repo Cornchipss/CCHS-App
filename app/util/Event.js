@@ -19,7 +19,7 @@ class Event
   }
 
   get begin() { return this._begin; }
-  set begin(begin) { this._begin = b; }
+  set begin(begin) { this._begin = begin; }
 
   get end() { return this._end; }
   set end(e) { this._end = e; }

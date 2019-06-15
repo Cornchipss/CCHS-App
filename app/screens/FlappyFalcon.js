@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Dimensions } from 'react-native';
+import { ScreenOrientation } from 'expo';
 
 import { CustomHeader } from '../components/Components';
 
@@ -18,12 +19,12 @@ export default class FlappyFalcon extends Component
 
   componentWillMount()
   {
-    Expo.ScreenOrientation.allow(Expo.ScreenOrientation.Orientation.PORTRAIT);
+    ScreenOrientation.lockAsync(ScreenOrientation.Orientation.PORTRAIT);
   }
 
   componentWillUnmount()
   {
-    Expo.ScreenOrientation.allow(Expo.ScreenOrientation.Orientation.ALL);
+    ScreenOrientation.lockAsync(ScreenOrientation.Orientation.ALL);
   }
 
   render()
