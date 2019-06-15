@@ -14,7 +14,7 @@ export default class DelayNotification extends Component
         ajax({cache: false, url: 'https://www.clsd.k12.pa.us/cms/Tools/OnScreenAlerts/UserControls/OnScreenAlertDialogListWrapper.aspx'}).then(res =>
         {
             const returnedData = res.data;
-            let dataStart = '<ul id="onscreenalertdialoglist" ><li id=1089 tabindex="0"><p>';
+            let dataStart = 'tabindex="0"><p>';
             let dataEnd = '</p>';
 
             let dataBegin = returnedData.substring(returnedData.indexOf(dataStart) + dataStart.length);
