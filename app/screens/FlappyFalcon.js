@@ -24,7 +24,7 @@ export default class FlappyFalcon extends Component
 
   componentWillUnmount()
   {
-    ScreenOrientation.lockAsync(ScreenOrientation.Orientation.ALL);
+    ScreenOrientation.unlockAsync();
   }
 
   render()

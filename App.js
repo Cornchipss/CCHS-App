@@ -7,6 +7,7 @@ import { DelayNotification } from './app/components/Components';
 import HomeScreen from './app/screens/Home'
 import EventsScreen from './app/screens/Events'
 import FlappyFalconScreen from './app/screens/FlappyFalcon';
+import WeatherScreen from './app/screens/Weather';
 
 // Don't forget the 'this.' - https://www.youtube.com/watch?v=M5d7vygUPoQ
 
@@ -20,6 +21,14 @@ const routeConfigs =
     navigationOptions:
     {
       title: 'Home'
+    }
+  },
+  Weather:
+  {
+    screen: WeatherScreen,
+    navigationOptions:
+    {
+      title: 'Weather'
     }
   },
   Events:

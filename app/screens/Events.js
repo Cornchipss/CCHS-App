@@ -8,7 +8,7 @@ import { styles } from '../util/Styles';
 
 const axios = require('axios'); // For ajax requests
 
-export default class App extends Component
+export default class Events extends Component
 {
   constructor(props)
   {
@@ -77,7 +77,7 @@ export default class App extends Component
       <View style={styles.container}>
         {
           !this.state.calendar || this.state.calendar.events.length === 0 ?
-          <Text style={{alignSelf: 'center'}}>No school events present.</Text>
+          <Text style={{alignSelf: 'center'}}>The school has yet to post any events for this month.</Text>
           :
           <ScrollView style={styles.container}>
             {
@@ -154,7 +154,7 @@ function pullEvents(start, end, handleEvents)
     headers: { 'Content-Type': 'application/json; charset=utf-8' }
   }).then((result) =>
   {
-    // Don't ever do this. Don't. It runs code from a string and returns its result, without any regard for security vulnerabilities.
+    // Don't ever do this. Just don't. It runs code from a string and returns its result, without any regard for security vulnerabilities (example: they could call react native functions and mess w/ the phone itself without us knowing).
     // Sadly, the school decided to use it (actually a less efficient version (eval)) in their code anyway, so I have to :(.
     const eventsJSON = Function('return ' + JSON.parse(result.request._response).d)();
 
